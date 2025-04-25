@@ -109,7 +109,7 @@ dates <- seq.Date(from = as.Date("2011-01-01"), to = as.Date("2011-02-28"), by =
 
 ## Best Five Models 
 
-### Model 2: Forecasting using NN - p=2, P=1, K=c(2,4)
+### Model 1: Forecasting using NN - p=2, P=1, K=c(2,4)
 
 ```{r model 1}
 K = c(2,4)
@@ -154,7 +154,7 @@ print_result(NN_result_1)
 
 ### Model 2: Forecasting using NN - p=1, P=0, K=c(2,4)
 
-```{r model 1}
+```{r model 2}
 K = c(2,4)
 for_period = 59
 
@@ -197,7 +197,7 @@ print_result(NN_result_2)
 
 ### Model 3: Forecasting using NN - p=1, P=1, K=c(2,4)
 
-```{r model 2}
+```{r model 3}
 forecast_3 <- NN_forecast(load_ts, 1, 1, K)
 
 #Plot model + observed data
@@ -215,7 +215,7 @@ print_result(NN_result_3)
 
 ### Model 4: Forecasting using TBATS+NN Combined Model with humidity and temperature variables
 
-```{r model 3}
+```{r model 4}
 h_future <- 59
 K=c(2,4)
 # Generate Fourier terms for training (if needed) and for forecasting 2010
@@ -252,7 +252,7 @@ print_result(hybrid_result)
 ```
 
 ### Model 5:  Forecasting using further combined model based on Model 3
-```{r model 4}
+```{r model 5}
 combined_for <- (TBATS_for$mean + forecast_3$mean) / 2
 
 forecast_5 <- (combined_for + NN_for$mean) / 2
