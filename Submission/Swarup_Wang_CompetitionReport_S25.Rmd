@@ -1,17 +1,19 @@
 ---
 title: "SwarupWang_ForecastCompetitionReport"
-subtitle: "[GitHub](https://github.com/popping-rosemary/SwarupWang_ENV797_TSA_ForecastCompetition_S25.git)"
 author: "Lucy Wang, Sameer Swarup"
 date: "2025-04-21"
-output: pdf_document
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+subtitle: "[GitHub](https://github.com/popping-rosemary/SwarupWang_ENV797_TSA_ForecastCompetition_S25.git)"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
-## Load Packages 
-```{r}
+```{r, include=FALSE}
 library(readxl)
 library(dplyr)
 library(tidyr)
@@ -31,7 +33,7 @@ library(knitr)
 ### Load load, temp, and humidity files 
 ```{r data file}
 # Load the demand excel file
-load_df <- read_excel("./Data/load.xlsx")
+load_df <- read_excel("../Data/load.xlsx")
   
 daily_load <- load_df %>% 
   group_by(meter_id, date) %>%
@@ -41,7 +43,7 @@ daily_load <- load_df %>%
   )
 
 # Load the temperature file
-temp_df <- read_excel("./Data/temperature.xlsx")
+temp_df <- read_excel("../Data/temperature.xlsx")
 
 daily_temp <- temp_df[1:3] %>% 
   group_by(date) %>%
@@ -51,7 +53,7 @@ daily_temp <- temp_df[1:3] %>%
   )
 
 # Load the humidity file
-humidity_df <- read_excel("./Data/relative_humidity.xlsx")
+humidity_df <- read_excel("../Data/relative_humidity.xlsx")
 
 daily_humidity <- humidity_df[1:3] %>% 
   group_by(date) %>%
@@ -66,10 +68,10 @@ daily_humidity <- humidity_df[1:3] %>%
 The forecasting code can be found in the Code folder 
 
 ```{r load file for humidity and temperature forecasts}
-daily_temp_for <- read.csv("./Data/Temp_Forecast.csv") 
+daily_temp_for <- read.csv("../Data/Temp_Forecast.csv") 
 temp_for <- msts(daily_temp_for$x, seasonal.periods =c(7,365.25), start=c(2011,1,1))
 
-daily_humidity_for <- read.csv("./Data/Humidity_Forecast.csv") 
+daily_humidity_for <- read.csv("../Data/Humidity_Forecast.csv") 
 humidity_for <- msts(daily_humidity_for$x, seasonal.periods =c(7,365.25), start=c(2011,1,1))
 ```
 
