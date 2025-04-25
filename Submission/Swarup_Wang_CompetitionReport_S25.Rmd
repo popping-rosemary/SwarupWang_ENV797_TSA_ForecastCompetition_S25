@@ -109,7 +109,7 @@ dates <- seq.Date(from = as.Date("2011-01-01"), to = as.Date("2011-02-28"), by =
 
 ## Best Five Models 
 
-### Model 1: Forecasting using NN - p=1, P=0, K=c(2,4)
+### Model 2: Forecasting using NN - p=2, P=1, K=c(2,4)
 
 ```{r model 1}
 K = c(2,4)
@@ -125,7 +125,7 @@ NN_forecast <- function(ts, p, P, K){
                                           K=K,h=for_period))
 }
 
-forecast_1 <- NN_forecast(load_ts, 1, 0, K)
+forecast_1 <- NN_forecast(load_ts, 2, 1, K)
 
 #Plot model + observed data
 autoplot(load_ts, color="gray70") +
@@ -152,10 +152,53 @@ print_result <- function(result){
 print_result(NN_result_1)
 ```
 
-### Model 2: Forecasting using NN - p=1, P=1, K=c(2,4)
+### Model 2: Forecasting using NN - p=1, P=0, K=c(2,4)
+
+```{r model 1}
+K = c(2,4)
+for_period = 59
+
+NN_forecast <- function(ts, p, P, K){
+  model_fit <- nnetar(ts,
+                 p=p,
+                 P=P,
+                 xreg=fourier(ts, K=K))
+  
+  model_forcast <-  forecast(model_fit, h=59,xreg=fourier(ts, 
+                                          K=K,h=for_period))
+}
+
+forecast_2 <- NN_forecast(load_ts, 1, 0, K)
+
+#Plot model + observed data
+autoplot(load_ts, color="gray70") +
+  autolayer(forecast_1, series="Neural Network",PI=FALSE)+
+  ylab("Load") +
+  ggtitle("Daily Load Forecast - Model 1")+
+  theme_minimal()+
+  theme(legend.position = "bottom")
+
+NN_result_2 <- as.data.frame(forecast_1$mean)
+
+# Combine into a dataframe
+print_result <- function(result){
+  df <- data.frame(Date = dates, Value = result) # Combine into a dataframe
+  df_summary <- bind_rows(
+  head(df),
+  tail(df)
+) # Get head and tail
+  # Print a table
+  kable(df_summary, caption = "Model result for the first and last five days") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+}
+
+print_result(NN_result_2)
+```
+
+### Model 3: Forecasting using NN - p=1, P=1, K=c(2,4)
 
 ```{r model 2}
-forecast_2 <- NN_forecast(load_ts, 1, 1, K)
+forecast_3 <- NN_forecast(load_ts, 1, 1, K)
 
 #Plot model + observed data
 autoplot(load_ts, color="gray70") +
@@ -165,12 +208,12 @@ autoplot(load_ts, color="gray70") +
   theme_minimal()+
   theme(legend.position = "bottom")
 
-NN_result_2 <- as.data.frame(forecast_2$mean)
+NN_result_3 <- as.data.frame(forecast_2$mean)
 
-print_result(NN_result_2)
+print_result(NN_result_3)
 ```
 
-### Model 3: Forecasting using TBATS+NN Combined Model with humidity and temperature variables
+### Model 4: Forecasting using TBATS+NN Combined Model with humidity and temperature variables
 
 ```{r model 3}
 h_future <- 59
@@ -208,38 +251,19 @@ hybrid_result <- as.data.frame(hybrid_for)
 print_result(hybrid_result)
 ```
 
-### Model 4:  Forecasting using further combined model based on Model 3
+### Model 5:  Forecasting using further combined model based on Model 3
 ```{r model 4}
-combined_for <- (TBATS_for$mean + forecast_2$mean) / 2
+combined_for <- (TBATS_for$mean + forecast_3$mean) / 2
 
-forecast_4 <- (combined_for + NN_for$mean) / 2
+forecast_5 <- (combined_for + NN_for$mean) / 2
 
 autoplot(load_ts, color="gray70") +
-  autolayer(forecast_4, series="Neural Network",PI=FALSE)+
+  autolayer(forecast_5, series="Neural Network",PI=FALSE)+
   ylab("Load") +
   ggtitle("Daily Load Forecast - Model 4")+
   theme_minimal()+
   theme(legend.position = "bottom")
 
-model4_result <- as.data.frame(forecast_4)
-print_result(model4_result)
+model5_result <- as.data.frame(forecast_5)
+print_result(model5_result)
 ```
-### Model 5: Forecasting using NN - p=1, P=0, K=c(2,2)
-
-```{r model 5}
-K=c(2,2)
-forecast_5 <- NN_forecast(load_ts, 1, 0, K)
-
-#Plot model + observed data
-autoplot(load_ts, color="gray70") +
-  autolayer(forecast_2, series="Neural Network",PI=FALSE)+
-  ylab("Load") +
-  ggtitle("Daily Load Forecast - Model 5")+
-  theme_minimal()+
-  theme(legend.position = "bottom")
-
-NN_result_5 <- as.data.frame(forecast_5$mean)
-
-print_result(NN_result_5)
-```
-
