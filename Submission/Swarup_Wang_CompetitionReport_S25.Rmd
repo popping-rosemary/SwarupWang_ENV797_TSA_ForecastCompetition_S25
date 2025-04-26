@@ -176,7 +176,7 @@ forecast_2 <- NN_forecast(load_ts, 1, 0, K)
 autoplot(load_ts, color="gray70") +
   autolayer(forecast_1, series="Neural Network",PI=FALSE)+
   ylab("Load") +
-  ggtitle("Daily Load Forecast - Model 1")+
+  ggtitle("Daily Load Forecast - Model 2")+
   theme_minimal()+
   theme(legend.position = "bottom")
 
@@ -206,7 +206,7 @@ forecast_3 <- NN_forecast(load_ts, 1, 1, K)
 autoplot(load_ts, color="gray70") +
   autolayer(forecast_2, series="Neural Network",PI=FALSE)+
   ylab("Load") +
-  ggtitle("Daily Load Forecast - Model 2")+
+  ggtitle("Daily Load Forecast - Model 3")+
   theme_minimal()+
   theme(legend.position = "bottom")
 
@@ -245,7 +245,7 @@ hybrid_for <- (TBATS_for$mean + NN_for$mean) / 2
 autoplot(load_ts, color="gray70") +
   autolayer(hybrid_for, series="Neural Network",PI=FALSE)+
   ylab("Load") +
-  ggtitle("Daily Load Forecast - Model 3")+
+  ggtitle("Daily Load Forecast - Model 4")+
   theme_minimal()+
   theme(legend.position = "bottom")
 
@@ -262,7 +262,7 @@ forecast_5 <- (combined_for + NN_for$mean) / 2
 autoplot(load_ts, color="gray70") +
   autolayer(forecast_5, series="Neural Network",PI=FALSE)+
   ylab("Load") +
-  ggtitle("Daily Load Forecast - Model 4")+
+  ggtitle("Daily Load Forecast - Model 5")+
   theme_minimal()+
   theme(legend.position = "bottom")
 
